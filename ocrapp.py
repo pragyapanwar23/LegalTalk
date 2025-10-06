@@ -27,12 +27,12 @@ if uploaded_file:
     if file_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff', '.webp')):
         img = Image.open(uploaded_file)
         st.image(img, caption="Uploaded Image", use_container_width=True)
-        with st.spinner("🔍 Performing OCR..."):
+        with st.spinner("Performing OCR"):
             extracted_text = ocr_image(img)
 
     # --- If PDF ---
     elif file_name.lower().endswith('.pdf'):
-        with st.spinner("📄 Converting PDF pages and extracting text..."):
+        with st.spinner("Converting PDF pages and extracting text"):
             pdf_bytes = uploaded_file.read()
             with open("temp.pdf", "wb") as f:
                 f.write(pdf_bytes)
@@ -45,7 +45,7 @@ if uploaded_file:
 
     # --- If DOCX ---
     elif file_name.lower().endswith('.docx'):
-        with st.spinner("Reading Word document..."):
+        with st.spinner("Reading Word document"):
             doc = Document(uploaded_file)
             for para in doc.paragraphs:
                 extracted_text += para.text + "\n"
@@ -74,4 +74,5 @@ if uploaded_file:
 
 else:
     st.info("Please upload a file to start.")
+
 
