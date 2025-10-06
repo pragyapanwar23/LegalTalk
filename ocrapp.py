@@ -9,7 +9,7 @@ import os
 # Page configuration
 st.set_page_config(page_title="OCR Text Extractor", page_icon="📝", layout="wide")
 
-st.title("🧾 OCR Text Extractor App")
+st.title("LegalTalk")
 st.write("Upload an image, PDF, or Word document to extract text using OCR.")
 
 # --- Helper function for OCR ---
@@ -45,7 +45,7 @@ if uploaded_file:
 
     # --- If DOCX ---
     elif file_name.lower().endswith('.docx'):
-        with st.spinner("📘 Reading Word document..."):
+        with st.spinner("Reading Word document..."):
             doc = Document(uploaded_file)
             for para in doc.paragraphs:
                 extracted_text += para.text + "\n"
@@ -58,19 +58,20 @@ if uploaded_file:
                     extracted_text += "\n[Image OCR]:\n" + ocr_image(img)
 
     else:
-        st.warning("⚠️ Unsupported file type. Please upload an image, PDF, or DOCX file.")
+        st.warning("Unsupported file type. Please upload an image, PDF, or DOCX file.")
 
     # --- Display extracted text ---
-    st.subheader("🧠 Extracted Text")
+    st.subheader("Extracted Text")
     st.text_area("", extracted_text, height=400)
 
     # --- Option to download extracted text ---
     st.download_button(
-        label="💾 Download Extracted Text",
+        label="Download Extracted Text",
         data=extracted_text,
         file_name=f"{os.path.splitext(file_name)[0]}_extracted.txt",
         mime="text/plain"
     )
 
 else:
-    st.info("👆 Please upload a file to start.")
+    st.info("Please upload a file to start.")
+
