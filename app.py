@@ -1,11 +1,14 @@
 import nltk
 
-# Ensure punkt is available on Streamlit Cloud
-try:
-    nltk.data.find("tokenizers/punkt")
-except LookupError:
-    nltk.download("punkt")
-from nltk.tokenize import sent_tokenize   # <-- REQUIRED
+# Fix for Streamlit Cloud: download BOTH punkt and punkt_tab
+for pkg in ["punkt", "punkt_tab"]:
+    try:
+        nltk.data.find(f"tokenizers/{pkg}")
+    except LookupError:
+        nltk.download(pkg)
+
+from nltk.tokenize import sent_tokenize
+
 
 
 import streamlit as st
@@ -600,4 +603,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
