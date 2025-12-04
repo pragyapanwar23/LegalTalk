@@ -1,5 +1,7 @@
 streamlit
+pdfplumber
+python-docx
 pytesseract
 pillow
-pdf2image
-python-docx
+nltk
+pandas
