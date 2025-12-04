@@ -514,7 +514,7 @@ def generate_summaries(
 # ========== 4. STREAMLIT APP ==========
 
 def main():
-    st.title("Legal Judgment – Technical & Layman Summaries")
+    st.title("LegalTalk")
 
     st.write(
         "Upload a **PDF**, **Word (.docx)** or **scanned image** of a judgment. "
@@ -603,5 +603,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
