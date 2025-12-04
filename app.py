@@ -1,12 +1,21 @@
+import nltk
+
+# Ensure punkt is available on Streamlit Cloud
+try:
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    nltk.download("punkt")
+from nltk.tokenize import sent_tokenize   # <-- REQUIRED
+
+
 import streamlit as st
+import os
 import io
 import re
 from typing import List, Dict
 
 from PIL import Image
 import pytesseract
-import nltk
-from nltk.tokenize import sent_tokenize
 
 # Optional dependencies
 try:
@@ -21,11 +30,6 @@ try:
 except ImportError:
     HAS_PDFPLUMBER = False
 
-# NLTK punkt
-try:
-    nltk.data.find("tokenizers/punkt")
-except LookupError:
-    nltk.download("punkt")
 
 
 # ========== 1. TEXT EXTRACTION HELPERS ==========
@@ -36,7 +40,10 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
     text_parts = []
     with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
         for page in pdf.pages:
-            t = page.extract_text()
+            try:
+                t = page.extract_text()
+            except:
+                t = ""
             if t:
                 text_parts.append(t)
     return "\n".join(text_parts)
@@ -50,16 +57,27 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
         f.write(file_bytes)
     doc = Document(tmp_path)
     paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+    os.remove(tmp_path)   # clean temp file
     return "\n".join(paragraphs)
 
 
+
 def extract_text_from_image(file_bytes: bytes) -> str:
-    img = Image.open(io.BytesIO(file_bytes))
+    try:
+        img = Image.open(io.BytesIO(file_bytes))
+    except Exception:
+        return ""
     text = pytesseract.image_to_string(img)
+
     return text
 
 
 def text_to_sentences(text: str) -> List[str]:
+    if not isinstance(text, str):
+        return []
+    text = text.strip()
+    if not text:
+        return []
     return [s.strip() for s in sent_tokenize(text) if s.strip()]
 
 
@@ -582,3 +600,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
